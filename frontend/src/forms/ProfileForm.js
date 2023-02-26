@@ -23,7 +23,7 @@ function ProfileForm(props) {
 	};
 
 	return (
-		<div className='container'>
+		<div>
 			<form onSubmit={submit}>
 				<div className='form-group'>
 					<label for='profile_email'>Email address</label>

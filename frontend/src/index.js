@@ -15,8 +15,8 @@ root.render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<Routes>
-				<Route exact path='login' element={<Login />} />
-				<Route exact path='register' element={<Register />} />
+				<Route exact path='/login' element={<Login />} />
+				<Route exact path='/register' element={<Register />} />
 				<Route element={<ProtectedRoute />}>
 					<Route exact path='/' element={<Dashboard />} />
 					<Route exact path='/dashboard' element={<Dashboard />} />

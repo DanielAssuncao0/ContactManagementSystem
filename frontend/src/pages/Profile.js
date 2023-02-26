@@ -15,8 +15,9 @@ function Profile() {
 	};
 
 	return (
-		<div>
+		<div className='container'>
 			<h2>Update profile</h2>
+			<hr />
 			<ProfileForm submit={submit} data={user} />
 		</div>
 	);
