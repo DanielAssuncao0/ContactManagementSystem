@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { constants } from './Constants';
-import ProfileForm from './ProfileForm';
+import { constants } from '../Constants';
+import ProfileForm from '../forms/ProfileForm';
 
 function Register() {
 	const submit = (data, reset) => {
 		console.log(data);
+		console.log(reset);
 		axios
 			.post(`${constants.API_URL}/profile`, data)
 			.then((response) => {
@@ -15,7 +16,7 @@ function Register() {
 	};
 
 	return (
-		<div className='App'>
+		<div>
 			<ProfileForm submit={submit} />
 		</div>
 	);

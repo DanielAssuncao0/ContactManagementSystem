@@ -1,15 +1,12 @@
-import logo from './logo.svg';
-import './App.css';
+import { Outlet } from 'react-router-dom';
 import Menu from './Menu';
-import Login from './Login';
-import Register from './Register';
 
 function App() {
 	return (
-		<div className='App'>
-			<Login />
-			<Register />
+		<div>
 			<Menu />
+			<br />
+			<Outlet />
 		</div>
 	);
 }
