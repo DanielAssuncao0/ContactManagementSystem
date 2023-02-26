@@ -22,6 +22,19 @@ app.listen(port, () => console.log(`Server started at ${port}`));
 // }
 
 app.post('/login', (request, response) => {
+	mongoClient
+		.connect(db_url, { useNewUrlParser: true })
+		.then((client) => {
+			const db = client.db('mydb');
+			const doc = db.collection('contact').findOne(request.body);
+			doc.then((document) => {
+				delete document.password;
+				response.status(200).json(document);
+			})
+				.catch(() => response.status(404).json({ error: 'User not found' }))
+				.finally(() => client.close());
+		})
+		.catch(() => response.status(404).json({ error: 'DB_ERR' }));
 	//user must enter auto-generated id & the password to login
 	//Check user in database with email and password
 	//If exists store session in a variable ? and return a token

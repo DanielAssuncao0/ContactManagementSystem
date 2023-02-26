@@ -11,7 +11,7 @@ function Login() {
 		e.preventDefault();
 		const data = { email: email, password: password };
 		axios
-			.post(`${constants.API_URL}/profile`, data)
+			.post(`${constants.API_URL}/login`, data)
 			.then((response) => {
 				setEmail('');
 				setPassword('');
