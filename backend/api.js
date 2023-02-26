@@ -59,7 +59,7 @@ app.get('/profile/:id', (request, response) => {
 //_id must be auto-generated
 app.post('/profile', (request, response) => {
 	// const id = from AutoINC
-	const id = 1;
+	const id = 2;
 	mongoClient
 		.connect(db_url, { useNewUrlParser: true })
 		.then((client) => {
