@@ -21,12 +21,15 @@ app.listen(port, () => console.log(`Server started at ${port}`));
 //         })
 // }
 
+//Login user
+//User must enter auto-generated id & the password to login
 app.post('/login', (request, response) => {
 	mongoClient
 		.connect(db_url, { useNewUrlParser: true })
 		.then((client) => {
 			const db = client.db('mydb');
-			const doc = db.collection('contact').findOne(request.body);
+			const find = { _id: parseInt(request.body.id), password: request.body.password };
+			const doc = db.collection('contact').findOne(find);
 			doc.then((document) => {
 				delete document.password;
 				response.status(200).json(document);
@@ -35,11 +38,6 @@ app.post('/login', (request, response) => {
 				.finally(() => client.close());
 		})
 		.catch(() => response.status(404).json({ error: 'DB_ERR' }));
-	//user must enter auto-generated id & the password to login
-	//Check user in database with email and password
-	//If exists store session in a variable ? and return a token
-	//?store token as well to the user
-	//If not return 401, User not found, verify email and password and try again.
 });
 
 //middleware to check always the user token and email
@@ -72,14 +70,16 @@ app.get('/profile/:id', (request, response) => {
 //_id must be auto-generated
 app.post('/profile', (request, response) => {
 	// const id = from AutoINC
-	const id = 2;
+	const id = 4;
 	mongoClient
 		.connect(db_url, { useNewUrlParser: true })
 		.then((client) => {
 			const db = client.db('mydb');
-			const doc = db
-				.collection('contact')
-				.insertOne({ _id: id, ...request.body, contacts: [] });
+			const doc = db.collection('contact').insertOne({
+				_id: id,
+				...request.body,
+				contacts: [{ name: 'Daniel', phone: '32416' }],
+			});
 			doc.then((document) => response.status(201).json(document))
 				.catch(() => response.status(404).json({ error: 'Failed to create user profile' }))
 				.finally(() => client.close());
@@ -110,11 +110,10 @@ app.post('/contact/:id', (request, response) => {
 	mongoClient
 		.connect(db_url, { useNewUrlParser: true })
 		.then((client) => {
-			const contact = { _id: 1, ...request.body };
 			const db = client.db('mydb');
 			const doc = db
 				.collection('contact')
-				.updateOne({ _id: request.params.id }, { $push: { contacts: contact } });
+				.updateOne({ _id: request.params.id }, { $push: { contacts: request.body } });
 			doc.then((document) => response.status(201).json(document))
 				.catch(() => response.status(404).json({ error: 'Failed to add contact' }))
 				.finally(() => client.close());
