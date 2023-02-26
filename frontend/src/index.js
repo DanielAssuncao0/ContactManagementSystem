@@ -3,22 +3,27 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Menu from './Menu';
-import Dashboard from './App';
+import Dashboard from './Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ProtectedRoute from './ProtectedRoute';
+import Profile from './pages/Profile';
+import Contact from './pages/Contact';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<Routes>
-				<Route exact path='/' element={<Dashboard />}>
-					<Route exact path='login' element={<Login />} />
-					<Route exact path='register' element={<Register />} />
-					{/* <Route path='profile' element={<Profile />} /> */}
-					{/* <Route path='*' element={<NoPage />} /> */}
+				<Route exact path='login' element={<Login />} />
+				<Route exact path='register' element={<Register />} />
+				<Route element={<ProtectedRoute />}>
+					<Route exact path='/' element={<Dashboard />} />
+					<Route exact path='dashboard' element={<Dashboard />} />
+					<Route exact path='profile' element={<Profile />} />
+					<Route index path='/contact' element={<Contact />} />
 				</Route>
+				{/* <Route path='*' element={<NoPage />} /> */}
 			</Routes>
 		</BrowserRouter>
 	</React.StrictMode>

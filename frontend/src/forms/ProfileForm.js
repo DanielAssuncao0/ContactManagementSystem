@@ -8,6 +8,14 @@ function ProfileForm(props) {
 	let [dob, setDob] = useState();
 	let [password, setPassword] = useState();
 
+	if (props.data) {
+		setEmail(props.data.email);
+		setName(props.data.name);
+		setPhone(props.data.phone);
+		setDob(props.data.dob);
+		setPassword(props.data.password);
+	}
+
 	const reset = () => {
 		setEmail('');
 		setName('');
@@ -79,7 +87,7 @@ function ProfileForm(props) {
 						onChange={(e) => setDob(e.target.value)}
 					/>
 				</div>
-				<div className='flex justify-between'>
+				<div>
 					<button type='submit' className='btn btn-primary'>
 						Submit
 					</button>

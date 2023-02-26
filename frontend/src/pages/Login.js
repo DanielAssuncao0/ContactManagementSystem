@@ -1,23 +1,24 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { constants } from '../Constants';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
-	let [email, setEmail] = useState();
+	const navigate = useNavigate();
+	let [id, setId] = useState();
 	let [password, setPassword] = useState();
 
 	function submit(e) {
 		e.preventDefault();
-		const data = { email: email, password: password };
+		const data = { id: id, password: password };
 		axios
 			.post(`${constants.API_URL}/login`, data)
 			.then((response) => {
-				setEmail('');
+				setId('');
 				setPassword('');
 				alert('Login successful');
-				//STORE user ID
-				//Redirect to dashboard
+				localStorage.setItem('user', JSON.stringify(response.data));
+				navigate('/dashboard');
 			})
 			.catch((err) => console.log(err));
 	}
@@ -25,16 +26,17 @@ function Login() {
 	return (
 		<div className='container'>
 			<h2>Login</h2>
+			<hr />
 			<form onSubmit={submit}>
 				<div className='form-group'>
 					<label for='profile_email'>Email address</label>
 					<input
-						type='email'
+						type='number'
 						className='form-control'
-						id='profile_email'
-						placeholder='name@example.com'
-						name='email'
-						onChange={(e) => setEmail(e.target.value)}
+						id='profile_id'
+						placeholder='3332'
+						name='id'
+						onChange={(e) => setId(e.target.value)}
 					/>
 				</div>
 				<div className='form-group'>
@@ -48,7 +50,7 @@ function Login() {
 						onChange={(e) => setPassword(e.target.value)}
 					/>
 				</div>
-				<div className='flex justify-between'>
+				<div>
 					<button type='submit' className='btn btn-primary'>
 						Submit
 					</button>
