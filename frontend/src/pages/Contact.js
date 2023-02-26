@@ -32,8 +32,10 @@ function Contact() {
 			.post(`${constants.API_URL}/contact/${user._id}`, data)
 			.then((response) => {
 				alert('Contact added');
-				user.contacts.push(data);
-				localStorage.setItem('user', JSON.stringify(user));
+				if (response.upsertedCount > 0) {
+					user.contacts.push(data);
+					localStorage.setItem('user', JSON.stringify(user));
+				}
 			})
 			.catch((err) => console.log(err));
 	};

@@ -2,19 +2,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function ProfileForm(props) {
-	let [name, setName] = useState();
-	let [email, setEmail] = useState();
-	let [phone, setPhone] = useState();
-	let [dob, setDob] = useState();
-	let [password, setPassword] = useState();
-
-	if (props.data) {
-		setEmail(props.data.email);
-		setName(props.data.name);
-		setPhone(props.data.phone);
-		setDob(props.data.dob);
-		setPassword(props.data.password);
-	}
+	let [name, setName] = useState(props.data?.name ?? '');
+	let [email, setEmail] = useState(props.data.name ?? '');
+	let [phone, setPhone] = useState(props.data.phone ?? '');
+	let [dob, setDob] = useState(props.data.dob ?? '');
+	let [password, setPassword] = useState(props.data.password ?? '');
 
 	const reset = () => {
 		setEmail('');

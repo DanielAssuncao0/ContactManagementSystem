@@ -6,7 +6,7 @@ function Profile() {
 	const user = JSON.parse(localStorage.getItem('user'));
 	const submit = (data, reset) => {
 		axios
-			.post(`${constants.API_URL}/profile`, data)
+			.put(`${constants.API_URL}/profile/${user._id}`, data)
 			.then((response) => {
 				reset();
 				alert('Profile updated');
@@ -16,6 +16,7 @@ function Profile() {
 
 	return (
 		<div>
+			<h2>Update profile</h2>
 			<ProfileForm submit={submit} data={user} />
 		</div>
 	);

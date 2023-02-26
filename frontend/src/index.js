@@ -19,9 +19,9 @@ root.render(
 				<Route exact path='register' element={<Register />} />
 				<Route element={<ProtectedRoute />}>
 					<Route exact path='/' element={<Dashboard />} />
-					<Route exact path='dashboard' element={<Dashboard />} />
-					<Route exact path='profile' element={<Profile />} />
-					<Route index path='/contact' element={<Contact />} />
+					<Route exact path='/dashboard' element={<Dashboard />} />
+					<Route exact path='/profile' element={<Profile />} />
+					<Route exact path='/contact' element={<Contact />} />
 				</Route>
 				{/* <Route path='*' element={<NoPage />} /> */}
 			</Routes>
