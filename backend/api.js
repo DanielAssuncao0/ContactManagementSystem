@@ -58,13 +58,15 @@ app.get('/profile/:id', (request, response) => {
 //User must enter name, password, phone, dob and contact list must be empty default
 //_id must be auto-generated
 app.post('/profile', (request, response) => {
+	// const id = from AutoINC
+	const id = 1;
 	mongoClient
 		.connect(db_url, { useNewUrlParser: true })
 		.then((client) => {
 			const db = client.db('mydb');
 			const doc = db
 				.collection('contact')
-				.insertOne({ _id: '1', ...request.body, contacts: [] });
+				.insertOne({ _id: id, ...request.body, contacts: [] });
 			doc.then((document) => response.status(201).json(document))
 				.catch(() => response.status(404).json({ error: 'Failed to create user profile' }))
 				.finally(() => client.close());
@@ -72,7 +74,6 @@ app.post('/profile', (request, response) => {
 		.catch(() => response.status(404).json({ error: 'DB_ERR' }));
 });
 
-//FIXME - NOT WORKING, ALWAYS GOES CATCH BLOCK
 //Update profile
 //Logged in user must able to update any of the details like name, phone, password
 app.put('/profile/:id', (request, response) => {
@@ -82,7 +83,7 @@ app.put('/profile/:id', (request, response) => {
 			const db = client.db('mydb');
 			const doc = db
 				.collection('contact')
-				.updateOne({ _id: request.params.id }, ...request.body);
+				.updateOne({ _id: parseInt(request.params.id) }, { $set: request.body });
 			doc.then((document) => response.status(200).json(document))
 				.catch(() => response.status(404).json({ error: 'Failed to update user profile' }))
 				.finally(() => client.close());
@@ -96,10 +97,11 @@ app.post('/contact/:id', (request, response) => {
 	mongoClient
 		.connect(db_url, { useNewUrlParser: true })
 		.then((client) => {
+			const contact = { _id: 1, ...request.body };
 			const db = client.db('mydb');
 			const doc = db
 				.collection('contact')
-				.updateOne({ _id: request.params.id }, { $push: { contacts: request.body } });
+				.updateOne({ _id: request.params.id }, { $push: { contacts: contact } });
 			doc.then((document) => response.status(201).json(document))
 				.catch(() => response.status(404).json({ error: 'Failed to add contact' }))
 				.finally(() => client.close());
@@ -107,18 +109,20 @@ app.post('/contact/:id', (request, response) => {
 		.catch(() => response.status(404).json({ error: 'DB_ERR' }));
 });
 
+//FIXME - REMOVE IS NOT WORKING YET
 //Delete contact
 //Logged in user must delete the particular contact
-app.delete('/contact/:id', (request, response) => {
+app.delete('/contact/:id/:contactId', (request, response) => {
 	mongoClient
 		.connect(db_url, { useNewUrlParser: true })
 		.then((client) => {
 			const db = client.db('mydb');
+			//Consider to check if data already exists
 			const doc = db
 				.collection('contact')
 				.updateOne(
 					{ _id: request.params.id },
-					{ $pull: { 'contacts.phone': request.body.phone } }
+					{ $pull: { contacts: { $where: { _id: request.params.contactId } } } }
 				);
 			doc.then((document) => response.status(200).json(document))
 				.catch(() => response.status(404).json({ error: 'Failed to remove contact' }))
